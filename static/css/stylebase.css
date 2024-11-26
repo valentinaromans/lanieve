@@ -1,0 +1,106 @@
+/* SECCIÓN NAVBAR */
+body{
+    background-color: #D9D9D9;   
+}
+
+.navbar-header{
+    background-color: #1C1B5B;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 85px;
+    padding: 5px 10%;
+}
+
+.navbar-header .navbar-logo{
+    cursor: pointer;
+}
+
+.navbar-header .navbar-logo img.imagen-logo{
+    height: 70px;
+    width: auto;
+    transition: all 0.3s;
+}
+
+.navbar-header .navbar-logo img.imagen-logo:hover{
+    transform: scale(1.2);
+}
+
+.navbar-header .nav-links{
+    list-style: none;
+    margin: 0 auto;
+}
+
+.navbar-header .nav-links li{
+    display: inline-block;
+    padding: 0 20px;
+}
+
+.navbar-header .nav-links li:hover{
+    transform: scale(1.1);
+}
+
+.navbar-header .nav-links a{
+    font-size: 700;
+    color: #D9D9D9;
+    text-decoration: none;
+}
+
+.navbar-header .nav-links li a:hover{
+    color: #e6c006;
+    font-style: bold;
+}
+
+
+
+
+/* SECCIÓN PIE DE PÁGINA */
+
+.pie-pagina{
+    margin-top: 1rem;
+    background-color: #1C1B5B;
+    padding: 1rem;
+    text-align: center;
+}
+
+@media(min-width: 768px){
+    .contenedor-pie-pagina{
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.pie-info{
+    flex: 0 0 calc(25% - 1rem);
+    margin-bottom: 1rem;
+    color: #D9D9D9;
+}
+
+.pie-info h3, .pie-info p{
+    color: #D9D9D9;
+    text-align: center;
+}
+
+.pie-info h3{
+    font-size: 1.3rem;
+    margin: 0.25rem 0;
+}
+
+.pie-info p{
+    font-size: 0.8rem;
+    margin: 0.15rem 0;
+}
+
+.redes-pie{
+    font-size: 1.2rem;
+    margin: 0 0.5rem;
+    color: #D9D9D9;
+}
+
+.navbar-footer{
+    text-align: center;
+    background-color: #000000;
+    color: #D9D9D9;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+}

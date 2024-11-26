@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+*{
+    box-sizing: border-box;
+    font-family: "Ubuntu", sans-serif;
+    font-size: 20px;
+}
+
+
+/* BOTÓN CREAR */
+.create-button {
+    font-size: 18px;
+    font-weight: 400;
+    height: 65px;
+    width: 165px;
+    border: 0px solid;
+    background-image: linear-gradient(45deg,#1c1b5b,#72ce23,#1c1b5b);
+    background-size: 500% 400%;
+    color: white;
+    border-radius: 50px;
+    transition: 0.6s all;
+   }
+   
+   .create-button:hover {
+    background-position: 75% 50%;
+    transform: perspective(100px)
+   }
+   
+   .create-button:active {
+    transform: scale(0.95);
+    transition: 0.1s;
+   }
+
+
+
+/* BOTÓN DESCARGAR */
+.dwl-button {
+  border: none;
+  color: #fff;
+  background-image: linear-gradient(30deg, #69590a, #ddba00);
+  border-radius: 20px;
+  background-size: 100% auto;
+  font-family: inherit;
+  font-size: 17px;
+  padding: 0.6em 1.5em;
+ }
+ 
+ .dwl-button:hover {
+  background-position: right center;
+  background-size: 200% auto;
+  -webkit-animation: pulse 2s infinite;
+  animation: pulse512 1.5s infinite;
+ }
+ 
+ @keyframes pulse512 {
+  0% {
+   box-shadow: 0 0 0 0 #a39341;
+  }
+ 
+  70% {
+   box-shadow: 0 0 0 10px rgb(218 103 68 / 0%);
+  }
+ 
+  100% {
+   box-shadow: 0 0 0 0 rgb(218 103 68 / 0%);
+  }
+ }
+
+
+
+
+
+
+ /* PREGUNTAS Y RESPUESTAS */
+.faq-body{
+    font-family: 'Open Sans', sans-serif;
+    color: #fff;
+    background-color: #000;
+}
+
+.faq-title{
+    font-size: 50px;
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: 40px;
+    text-decoration: underline 4px;
+}
+
+.support-description{
+    text-align: center;
+}
+
+.questions-container{
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.question{
+    border-bottom: 1px solid #fff;
+}
+.question .faq-button{
+    width: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 15px;
+    border:none;
+    outline: none;
+    font-size: 22px;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+.question p{
+    font-size: 22px;
+    max-height: 0;
+    opacity: 0;
+    line-height: 1.5;
+    overflow: hidden;
+    transition: all 0.6s ease;
+}
+.d-arrow{
+    transition: transform 0.5s ease-in ;
+    color: #fff;
+}
+
+/*add this class when click*/
+.question p.show{
+    max-height: 200px; 
+    opacity: 1;
+    padding:0px 15px 30px 15px;
+}
+.question faq-button .d-arrow.rotate{
+    transform: rotate(180deg);
+}
+
+
+
+/* CODIGO */ 
+  /* Estilos para la página de ingreso del código */
+.codigo-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.codigo-container h1 {
+    font-size: 28px;
+    color: #1C1B5B;
+    margin-bottom: 20px;
+}
+
+.codigo-container p {
+    font-size: 16px;
+    color: #555555;
+    margin-bottom: 20px;
+}
+
+.codigo-form .codigo-form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.codigo-form label {
+    font-size: 14px;
+    color: #333333;
+}
+
+.codigo-form input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.codigo-form button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #1C1B5B;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.codigo-form button:hover {
+    background-color: #e6c006;
+}
+
