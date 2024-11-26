@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Pedidos Pendientes{% endblock %}
+{% block content %}
+
+<div class="container mt-4 styled-container">
+    <h1 class="page-title">Pedidos Pendientes</h1>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Cliente</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Fecha y Hora</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+            <tr>
+                <td>{{ pedido.codigo }}</td>
+                <td>{{ pedido.cliente.nombre }}</td>
+                <td>
+                    {% for helado in pedido.helados.all %}
+                    {{ helado.nombre }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ pedido.fecha_hora }}</td>
+                <td>{{ pedido.fecha_hora }}</td>
+                <td>
+                    <a href="{% url 'pedidos:detallepedido' pedido.id %}" class="btn-view">Ver Detalle</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

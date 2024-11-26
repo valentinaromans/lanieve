@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Editar Helado{% endblock %}
+{% block content %}
+
+<div class="container mt-4 create-styled">
+    <h1 class="create-title">Editar Helado</h1>
+    <form method="post" class="create-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="create-form-actions">
+            <button type="submit" class="btn btn-primary">Actualizar</button>
+            <a href="{% url 'helados:lista_helados' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Productos{% endblock %}
+{% block content %}
+<div class="faq-body">
+    <section>
+        <h1 class="faq-title">PREGUNTAS Y RESPUESTAS</h1>
+        <p class="support-description">Encuentra respuestas a las preguntas más comunes sobre el uso de la plataforma.</p>
+        <div class="questions-container">
+            <div class="question">
+                <button class="faq-button">
+                    <span>¿Cómo actualizo el estado de un pedido?</span>
+                    <i class="fas fa-chevron-down d-arrow"></i>
+                </button>
+                <p>Para actualizar el estado de un pedido, navega a la sección de "Pedidos Pendientes" y haz clic en el botón correspondiente para cambiar el estado a "En preparación" o "Listo".</p>
+            </div>
+    
+            <div class="question">
+                <button class="faq-button">
+                    <span>¿Cómo puedo ver mis pedidos anteriores?</span>
+                    <i class="fas fa-chevron-down d-arrow"></i>
+                </button>
+                <p>Ve a la sección de "Historial de Pedidos" para revisar los pedidos que ya has completado. Puedes filtrar por fecha para encontrar pedidos específicos.</p>
+            </div>
+    
+            <div class="question">
+                <button class="faq-button">
+                    <span>¿Cómo contacto al administrador?</span>
+                    <i class="fas fa-chevron-down d-arrow"></i>
+                </button>
+                <p>Puedes usar el sistema de mensajes interno o enviar un correo desde tu cuenta corporativa.</p>
+            </div>
+    
+        </div>
+    </section>
+</div>
+
+<script src="faq.js"></script>
+
+{% endblock %}

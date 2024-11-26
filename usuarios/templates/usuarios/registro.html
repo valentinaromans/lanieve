@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Registro{% endblock %}
+{% block content %}
+
+<section class="login-body">
+    <div class="login-form-main">
+        <div class="login-form-content">
+            <div class="circle-1"></div>
+            <div class="circle-2"></div>
+            <div class="circle-3"></div>
+            <div class="login-box">
+                <h2>Registro</h2>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    
+                    <!-- Campo para Nombre -->
+                    <div class="input-box">
+                        <label for="id_nombre">Nombre:</label>
+                        <input type="text" name="nombre" id="id_nombre" class="form-control" value="{{ form.nombre.value|default:'' }}" required>
+                        {{ form.nombre.errors }}
+                    </div>
+                    
+                    <!-- Campo para Apellido -->
+                    <div class="input-box">
+                        <label for="id_apellido">Apellido:</label>
+                        <input type="text" name="apellido" id="id_apellido" class="form-control" value="{{ form.apellido.value|default:'' }}" required>
+                        {{ form.apellido.errors }}
+                    </div>
+            
+                    <!-- Campo para Nombre de usuario -->
+                    <div class="input-box">
+                        <label for="id_username">Nombre de usuario:</label>
+                        <input type="text" name="username" id="id_username" class="form-control" value="{{ form.username.value|default:'' }}" required>
+                        {{ form.username.errors }}
+                    </div>
+                    
+                    <!-- Campo para Correo Electrónico -->
+                    <div class="input-box">
+                        <label for="id_email">Correo electrónico:</label>
+                        <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value|default:'' }}" required>
+                        {{ form.email.errors }}
+                    </div>
+                    
+                    <!-- Campo para Contraseña -->
+                    <div class="input-box">
+                        <label for="id_password">Contraseña:</label>
+                        <input type="password" name="password" id="id_password" class="form-control" required>
+                        {{ form.password.errors }}
+                    </div>
+                    
+                    <!-- Campo para Confirmar Contraseña -->
+                    <div class="input-box">
+                        <label for="id_password_confirmacion">Confirmar contraseña:</label>
+                        <input type="password" name="password_confirmacion" id="id_password_confirmacion" class="form-control" required>
+                        {{ form.password_confirmacion.errors }}
+                    </div>
+                    
+                    <!-- Campo para Rol -->
+                    <div class="input-box">
+                        <label for="id_rol">Rol:</label>
+                        <select name="rol" id="id_rol" class="form-control" required>
+                            {% for value, label in form.rol.field.choices %}
+                                <option value="{{ value }}" {% if form.rol.value == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        {{ form.rol.errors }}
+                    </div>
+
+                    <!-- Botón para enviar el formulario -->
+                    <button type="submit" class="login-btn">Registrarse</button>
+                    
+                    <!-- Informa si el usuario fue creado con éxito -->
+                    {% if messages %}
+                    <div class="alert alert-success mt-3">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
