@@ -9,20 +9,20 @@
         <p><strong>Cliente:</strong> {{ pedido.cliente.nombre }} {{ pedido.cliente.apellido }}</p>
         <p><strong>Productos:</strong>
             {% for detalle in pedido.detalles.all %}
-                {{ detalle.helado.nombre }} (Cantidad: {{ detalle.cantidad }}){% if not forloop.last %}, {% endif %}
+                {{ detalle.codigo }} (Cantidad: {{ detalle.cantidad }}){% if not forloop.last %}, {% endif %}
             {% endfor %}
         </p>
-        <p><strong>Total:</strong> {{ pedido.total }}</p>  <!-- Aquí deberías calcular el total -->
+        <p><strong>Total:</strong> {{ pedido.total }}</p> <!-- Aquí deberías calcular el total -->
         <p><strong>Estado:</strong> {{ pedido.estado }}</p>
         <p><strong>Fecha y Hora:</strong> {{ pedido.fecha_hora }}</p>
     </div>
     <div class="detalle-buttons">
         <a href="{% url 'pedidos:pedidospendientes' %}" class="detalle-volver-btn">Volver a Pedidos Pendientes</a>
         {% if pedido.estado == 'procesado' %}
-            <form method="post" action="{% url 'pedidos:confirmarpedido' pedido_id=pedido.id %}">
-                {% csrf_token %}
-                <button type="submit" class="detalle-editar-btn">Confirmar Pedido Realizado</button>
-            </form>
+        <form method="post" action="{% url 'pedidos:confirmarpedido' pedido_id=pedido.id %}">
+            {% csrf_token %}
+            <button type="submit" class="detalle-editar-btn">Confirmar Pedido Realizado</button>
+        </form>
         {% endif %}
     </div>
 </div>
