@@ -21,11 +21,15 @@
                 <td>{{ pedido.codigo }}</td>
                 <td>{{ pedido.cliente.nombre }}</td>
                 <td>
-                    {% for helado in pedido.helados.all %}
-                    {{ helado.nombre }}{% if not forloop.last %}, {% endif %}
+                    {% for detalle in pedido.detalles.all %}
+                    {{ detalle.helado.nombre }}{% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </td>
-                <td>{{ pedido.fecha_hora }}</td>
+                <td>
+                    {% for detalle in pedido.detalles.all %}
+                    {{ detalle.cantidad }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
                 <td>{{ pedido.fecha_hora }}</td>
                 <td>
                     <a href="{% url 'pedidos:detallepedido' pedido.id %}" class="btn-view">Ver Detalle</a>

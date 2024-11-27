@@ -7,7 +7,7 @@
     <table class="styled-table">
         <thead>
             <tr>
-                <th>Codigo</th>
+                <th>Código</th>
                 <th>Cliente</th>
                 <th>Producto</th>
                 <th>Cantidad</th>
@@ -19,9 +19,17 @@
             {% for pedido in pedidos %}
             <tr>
                 <td>{{ pedido.codigo }}</td>
-                <td>{{ pedido.cliente }}</td>
-                <td>{{ pedido.producto }}</td>
-                <td>{{ pedido.cantidad }}</td>
+                <td>{{ pedido.cliente.nombre }} {{ pedido.cliente.apellido }}</td> <!-- Mostramos nombre y apellido del cliente -->
+                <td>
+                    {% for detalle in pedido.detalles.all %}
+                        {{ detalle.helado.nombre }} (Cantidad: {{ detalle.cantidad }}){% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for detalle in pedido.detalles.all %}
+                        {{ detalle.cantidad }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
                 <td>{{ pedido.fecha_hora }}</td>
                 <td>
                     <a href="{% url 'pedidos:detallepedido' pedido.id %}" class="btn-view">Ver Detalle</a>
