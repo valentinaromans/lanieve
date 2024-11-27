@@ -31,7 +31,7 @@ def login_view(request):
         usuario = authenticate(request, username=username, password=password)
         if usuario is not None:
             login(request, usuario)
-            return redirect('productos:lista_productos')
+            return redirect('helados:lista_helados')
         else:
             messages.error(request, 'Nombre de usuario o contraseña incorrectos.')
     return render(request, 'usuarios/login.html')

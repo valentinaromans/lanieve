@@ -9,7 +9,7 @@ class Boleta(models.Model):
         choices=[('pendiente', 'Pendiente'), ('procesado', 'Procesado'), ('finalizado', 'Finalizado')],
     )
     fecha_hora = models.DateTimeField(auto_now_add=True)
-    codigo = models.CharField(max_length=10, unique=True, blank=True)
+    codigo = models.IntegerField(unique=True)
 
     def __str__(self):
         return f"Boleta {self.codigo} - Cliente {self.cliente_id}"
