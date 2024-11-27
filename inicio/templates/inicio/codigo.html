@@ -6,17 +6,21 @@
     <h1>Ingresar Código</h1>
     <p>Por favor, ingresa el código que generó la app móvil para continuar.</p>
 
-    {% if mensaje %}
-        <div class="alert {% if 'verificado' in mensaje %}alert-success{% else %}alert-danger{% endif %}">
-            {{ mensaje }}
-        </div>
+    {% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
     {% endif %}
 
-    <form method="post" class="codigo-form">
+
+    <form method="post" class="codigo-form" action="{% url 'inicio:verificar_codigo' %}">
         {% csrf_token %}
         <div class="codigo-form-group">
             <label for="codigo">Código de Verificación:</label>
-            <input type="text" id="codigo" name="codigo" class="codigo-form-control" placeholder="Ejemplo: 123456" required>
+            <input type="text" id="codigo" name="codigo" class="codigo-form-control" placeholder="Ejemplo: 123456"
+                required>
         </div>
         <button type="submit" class="btn btn-primary">Verificar</button>
     </form>

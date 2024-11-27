@@ -22,6 +22,11 @@ class Boleta(models.Model):
     estado = models.CharField(max_length=10, choices=ESTADOS)
     fecha_hora = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        if self.estado not in dict(self.ESTADOS):  # Validación estricta
+            raise ValueError(f"Estado inválido: {self.estado}. Los estados permitidos son: {', '.join(dict(self.ESTADOS).keys())}.")
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"Boleta #{self.id} - {self.estado}"
 

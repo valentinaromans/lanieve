@@ -3,7 +3,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib import messages
-from pedidos.models import Boleta
+from pedidos.models import BoletaDetalle
 
 # Create your views here.
 def inicio(request):
@@ -48,32 +48,22 @@ def codigo(request):
     return render(request, 'inicio/codigo.html')
 
 
-from django.shortcuts import render
-from pedidos.models import BoletaDetalle, Boleta
-
 def verificar_codigo(request):
-    mensaje = ""
-    
     if request.method == 'POST':
-        codigo = int(request.POST.get('codigo'))
-        
-        # Buscar el detalle de boleta con el código ingresado
-        detalle = BoletaDetalle.objects.filter(codigo=codigo).first()
-        
-        if detalle:
+        codigo = request.POST.get('codigo')
+        try:
+            detalle = BoletaDetalle.objects.get(codigo=codigo)
             boleta = detalle.id_boleta
-            if boleta.estado == 'pendiente':
-                # Cambiar el estado de la boleta a 'procesado'
+            if boleta.estado == 'pendiente':  # Verifica si está pendiente
                 boleta.estado = 'procesado'
-                boleta.save()
-                mensaje = "El código fue verificado y la boleta ha sido procesada."
+                boleta.save()  # Guarda el cambio
+                messages.success(request, "El estado de la boleta cambió a 'procesado'.")
             else:
-                mensaje = "La boleta ya está procesada o finalizada."
-        else:
-            mensaje = "Código inválido. Por favor, verifica e intenta nuevamente."
-    
-    return render(request, 'inicio/codigo.html', {'mensaje': mensaje})
-
+                messages.info(request, f"La boleta ya está en estado '{boleta.estado}'.")
+        except BoletaDetalle.DoesNotExist:
+            messages.error(request, "El código ingresado no es válido.")
+        return redirect('inicio:codigo')  # Redirige a la misma página después de procesar
+    return render(request, 'inicio/codigo.html')
 
 
 def ayuda_soporte(request):
