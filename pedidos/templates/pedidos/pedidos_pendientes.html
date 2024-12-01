@@ -9,32 +9,22 @@
             <tr>
                 <th>Código</th>
                 <th>Cliente</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
                 <th>Fecha y Hora</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             {% for pedido in pedidos %}
+            {% for detalle in pedido.boletadetalle_set.all %}
             <tr>
-                <td>{{ pedido.codigo }}</td>
+                <td>{{ detalle.codigo }}</td>
                 <td>{{ pedido.cliente.nombre }}</td>
-                <td>
-                    {% for detalle in pedido.detalles.all %}
-                    {{ detalle.helado.nombre }}{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                </td>
-                <td>
-                    {% for detalle in pedido.detalles.all %}
-                    {{ detalle.cantidad }}{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                </td>
                 <td>{{ pedido.fecha_hora }}</td>
                 <td>
-                    <a href="{% url 'pedidos:detallepedido' pedido.id %}" class="btn-view">Ver Detalle</a>
+                    <a href="{% url 'pedidos:detallepedido' pedido.id %}" class="btn btn-primary">Ver Detalle</a>
                 </td>
             </tr>
+            {% endfor %}
             {% endfor %}
         </tbody>
     </table>
