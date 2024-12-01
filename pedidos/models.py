@@ -10,7 +10,7 @@ class Cliente(models.Model):
     contrasena = models.CharField(max_length=64)
 
     def __str__(self):
-        return f"{self.nombre} {self.apellido}"
+        return f"{self.nombre} {self.apellido} {self.email} {self.contrasena}"
 
 class Boleta(models.Model):
     ESTADOS = [
