@@ -129,18 +129,20 @@ def historial_pedidos(request):
 # Vista de detalle del pedido
 def detalle_pedido(request, pk):
     pedido = get_object_or_404(Boleta, pk=pk)
-    pedido.cliente_nombre = get_cliente_nombre(pedido.cliente.id)
-
-    # Obtener detalles del pago asociado a la boleta
+    detalles = pedido.boletadetalle_set.all()  # Detalles asociados al pedido
     pago = Pago.objects.filter(boleta=pedido).first()
-    pedido.total_pago = pago.total if pago else 0
+    total_pago = pago.total if pago else 0
 
     if request.method == 'POST':  # Confirmar pedido
         pedido.estado = 'finalizado'
         pedido.save()
-        return redirect('pedidos:pedidospendientes')  # Redirige a la lista de pendientes
+        return redirect('pedidos:pedidospendientes')
 
-    return render(request, 'pedidos/detalle_pedido.html', {'pedido': pedido})
+    return render(request, 'pedidos/detalle_pedido.html', {
+        'pedido': pedido,
+        'detalles': detalles,
+        'total_pago': total_pago,
+    })
 
 
 # Vista para confirmar un pedido

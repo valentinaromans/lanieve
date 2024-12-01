@@ -5,16 +5,23 @@
 <div class="container mt-4 detalle-styled">
     <h1 class="detalle-title">Detalle del Pedido</h1>
     <div class="detalle-product">
-        <p><strong>Código del Pedido:</strong> {{ pedido.codigo }}</p>
-        <p><strong>Cliente:</strong> {{ pedido.cliente.nombre }} {{ pedido.cliente.apellido }}</p>
-        <p><strong>Productos:</strong>
-            {% for detalle in pedido.detalles.all %}
-                {{ detalle.codigo }} (Cantidad: {{ detalle.cantidad }}){% if not forloop.last %}, {% endif %}
+        <p><strong>Código del Pedido:</strong> 
+            {% for detalle in detalles %}
+                {{ detalle.codigo }}
             {% endfor %}
         </p>
-        <p><strong>Total:</strong> {{ pedido.total }}</p> <!-- Aquí deberías calcular el total -->
-        <p><strong>Estado:</strong> {{ pedido.estado }}</p>
+        <p><strong>Cliente:</strong> {{ pedido.cliente.nombre }} {{ pedido.cliente.apellido }}</p>
         <p><strong>Fecha y Hora:</strong> {{ pedido.fecha_hora }}</p>
+        <p><strong>Productos:</strong></p>
+        <ul>
+            {% for detalle in detalles %}
+            <li>
+                Producto: {{ detalle.id_helado.nombre }} - Cantidad: {{ detalle.cantidad }}
+            </li>
+            {% endfor %}
+        </ul>
+        <p><strong>Total:</strong> ${{ total_pago }}</p>
+        <p><strong>Estado:</strong> {{ pedido.estado|capfirst }}</p>
     </div>
     <div class="detalle-buttons">
         <a href="{% url 'pedidos:pedidospendientes' %}" class="detalle-volver-btn">Volver a Pedidos Pendientes</a>
