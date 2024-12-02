@@ -12,10 +12,6 @@ class Cliente(models.Model):
     def __str__(self):
         return f"{self.nombre} {self.apellido} {self.email} {self.contrasena}"
 
-    def set_password(self, password):
-        # Asegúrate de encriptar la contraseña antes de almacenarla
-        self.contrasena = password  # Aquí deberías aplicar la encriptación de contraseña si no la has aplicado
-
 class Boleta(models.Model):
     ESTADOS = [
         ('pendiente', 'Pendiente'),
