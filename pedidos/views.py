@@ -1,18 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
-<<<<<<< HEAD
-from .models import Boleta, Cliente, Pago
 from django.contrib.auth import authenticate
-=======
 from .models import Boleta, Cliente, Pago, BoletaDetalle
->>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
-from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 import json
 
-<<<<<<< HEAD
+
 @api_view(['POST'])
 def RegisterView(request):
     """
@@ -115,34 +110,20 @@ def api_articulos_detalle(request, pk):
         return Response({"message": "Cliente eliminado correctamente."}, status=status.HTTP_204_NO_CONTENT)
 
 
-# Función para obtener el nombre del cliente
-@login_required
-=======
 # Función para obtener el nombre del cliente desde la tabla Cliente
->>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
 def get_cliente_nombre(cliente_id):
-    cliente = Cliente.objects.get(id=cliente_id)  # Recuperamos el cliente
+    cliente = Cliente.objects.get(id=cliente_id)  # Recuperamos el cliente usando la relación con la tabla Cliente
     return cliente.nombre if cliente else "Cliente desconocido"
 
 
-<<<<<<< HEAD
-# Vista de pedidos pendientes
-@login_required
-=======
->>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
 def pedidos_pendientes(request):
     pedidos = Boleta.objects.filter(estado='procesado').order_by('fecha_hora')
     for pedido in pedidos:
-        pedido.cliente_nombre = get_cliente_nombre(pedido.cliente.id)  # Obtenemos el nombre del cliente
+        pedido.cliente_nombre = get_cliente_nombre(pedido.cliente.id)
         pedido.detalles = pedido.boletadetalle_set.all()  # Relación inversa a través del modelo BoletaDetalle
     return render(request, 'pedidos/pedidos_pendientes.html', {'pedidos': pedidos})
 
 
-<<<<<<< HEAD
-# Vista de historial de pedidos
-@login_required
-=======
->>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
 def historial_pedidos(request):
     pedidos = Boleta.objects.filter(estado='finalizado').order_by('fecha_hora')
     for pedido in pedidos:
@@ -153,11 +134,6 @@ def historial_pedidos(request):
     return render(request, 'pedidos/historial_pedidos.html', {'pedidos': pedidos})
 
 
-<<<<<<< HEAD
-# Vista de detalle del pedido
-@login_required
-=======
->>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
 def detalle_pedido(request, pk):
     pedido = get_object_or_404(Boleta, pk=pk)
     detalles = pedido.boletadetalle_set.all()  # Detalles asociados al pedido
@@ -176,11 +152,6 @@ def detalle_pedido(request, pk):
     })
 
 
-<<<<<<< HEAD
-# Vista para confirmar un pedido
-@login_required
-=======
->>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
 def confirmar_pedido(request, pedido_id):
     pedido = get_object_or_404(Boleta, id=pedido_id)
     if pedido.estado == 'procesado':
@@ -200,4 +171,3 @@ def confirmar_pedido(request, pedido_id):
                 raise ValueError(f"Stock insuficiente para el helado {helado.nombre}.")
 
     return redirect('pedidos:detallepedido', pk=pedido.id)
-
