@@ -1,63 +1,65 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Boleta, Cliente, Pago
-from .forms import RegistroForm
-from django.contrib.auth import login, authenticate, logout
-from django.contrib import messages
+from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
-from .serializers import ArticuloSerializer
+import json
 
-
-# Registro de cliente
-def registro(request):
+@api_view(['POST'])
+def RegisterView(request):
+    """
+    Vista para registrar un nuevo cliente.
+    Se reciben los parámetros: nombre, apellido, telefono, email, contraseña.
+    """
     if request.method == 'POST':
-        form = RegistroForm(request.POST)
-        if form.is_valid():
-            # Guardar el Cliente
-            cliente = form.save(commit=False)
-            cliente.set_password(form.cleaned_data['contrasena'])  # 'contrasena' es el campo de la contraseña
-            cliente.save()  # Guardamos solo el Cliente, sin necesidad de crear un perfil
+        # Recibimos los datos del cliente
+        nombre = request.data.get('nombre')
+        apellido = request.data.get('apellido')
+        telefono = request.data.get('telefono')
+        email = request.data.get('email')
+        contrasena = request.data.get('contrasena')
 
-            messages.success(request, 'Registro exitoso. Ahora puedes iniciar sesión.')
-            return redirect('usuarios:login')  # Redirigir a la página de login
-    else:
-        form = RegistroForm()
-    return render(request, 'usuarios/registro.html', {'form': form})
+        # Validar que todos los campos estén presentes
+        if not all([nombre, apellido, telefono, email, contrasena]):
+            return Response({"error": "Todos los campos son obligatorios."}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Verificar si ya existe un cliente con ese email
+        if Cliente.objects.filter(email=email).exists():
+            return Response({"error": "Este email ya está registrado."}, status=status.HTTP_400_BAD_REQUEST)
 
-# Vista de inicio de sesión
-def login_view(request):
-    if request.method == 'POST':
-        email = request.POST['email']
-        contrasena = request.POST['contrasena']
-        cliente = authenticate(request, email=email, contrasena=contrasena)
-        if cliente:
-            login(request, cliente)
-            return redirect('productos:lista_productos')
-        else:
-            messages.error(request, 'Correo electrónico o contraseña incorrectos.')
-    return render(request, 'usuarios/login.html')
+        # Crear el cliente en la base de datos
+        cliente = Cliente.objects.create(
+            nombre=nombre,
+            apellido=apellido,
+            telefono=telefono,
+            email=email,
+        )
 
+        # Encriptar la contraseña antes de guardarla
+        cliente.set_password(contrasena)
+        cliente.save()
 
-# Vista de cierre de sesión
-@login_required
-def logout_view(request):
-    logout(request)
-    return redirect('usuarios:login')
+        # Crear el token de autenticación para el nuevo cliente
+        token, created = Token.objects.get_or_create(user=cliente)
+
+        return Response({'success': True, 'token': token.key, 'message': 'Registro exitoso'}, status=status.HTTP_201_CREATED)
+    return Response({'error': 'Método no permitido'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 # API de Login para autenticación basada en token
 @api_view(["POST"])
 def LoginView(request):
     if request.method == "POST":
-        email = request.data.get('email')
-        contrasena = request.data.get('contrasena')
-        cliente = authenticate(request, username=email, password=contrasena)
+        data = json.loads(request.body)
+        email = data.get('email')
+        contrasena = data.get('contrasena')
 
+        cliente = authenticate(request, username=email, password=contrasena)
         if cliente is not None:
+            # Generar o recuperar el token de autenticación
             token, created = Token.objects.get_or_create(user=cliente)
             return Response({'token': token.key}, status=status.HTTP_200_OK)
         return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -68,14 +70,11 @@ def LoginView(request):
 def api_articulos(request):
     if request.method == "GET":
         articulos = Cliente.objects.all()  # Obtenemos todos los clientes
-        serializer = ArticuloSerializer(articulos, many=True)
-        return Response(serializer.data)
+        # Aquí puedes usar un serializer si necesitas formatear la respuesta de forma más estructurada
+        data = [{"id": articulo.id, "nombre": articulo.nombre, "apellido": articulo.apellido, "telefono": articulo.telefono, "email": articulo.email} for articulo in articulos]
+        return Response(data)
     elif request.method == "POST":
-        serializer = ArticuloSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "Metodo POST para artículos no soportado."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 # API para obtener, actualizar y eliminar un artículo (Cliente)
@@ -87,26 +86,39 @@ def api_articulos_detalle(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "GET":
-        serializer = ArticuloSerializer(articulo)
-        return Response(serializer.data)
+        data = {
+            "id": articulo.id,
+            "nombre": articulo.nombre,
+            "apellido": articulo.apellido,
+            "telefono": articulo.telefono,
+            "email": articulo.email
+        }
+        return Response(data)
+
     elif request.method == "PUT":
-        serializer = ArticuloSerializer(articulo, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Actualizar el cliente
+        data = json.loads(request.body)
+        articulo.nombre = data.get('nombre', articulo.nombre)
+        articulo.apellido = data.get('apellido', articulo.apellido)
+        articulo.telefono = data.get('telefono', articulo.telefono)
+        articulo.email = data.get('email', articulo.email)
+        articulo.save()
+        return Response({"message": "Cliente actualizado correctamente."}, status=status.HTTP_200_OK)
+
     elif request.method == "DELETE":
         articulo.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Cliente eliminado correctamente."}, status=status.HTTP_204_NO_CONTENT)
 
 
 # Función para obtener el nombre del cliente
+@login_required
 def get_cliente_nombre(cliente_id):
     cliente = Cliente.objects.get(id=cliente_id)  # Recuperamos el cliente
     return cliente.nombre if cliente else "Cliente desconocido"
 
 
 # Vista de pedidos pendientes
+@login_required
 def pedidos_pendientes(request):
     pedidos = Boleta.objects.filter(estado='procesado').order_by('fecha_hora')
     for pedido in pedidos:
@@ -116,6 +128,7 @@ def pedidos_pendientes(request):
 
 
 # Vista de historial de pedidos
+@login_required
 def historial_pedidos(request):
     pedidos = Boleta.objects.filter(estado='finalizado').order_by('fecha_hora')
     for pedido in pedidos:
@@ -127,6 +140,7 @@ def historial_pedidos(request):
 
 
 # Vista de detalle del pedido
+@login_required
 def detalle_pedido(request, pk):
     pedido = get_object_or_404(Boleta, pk=pk)
     detalles = pedido.boletadetalle_set.all()  # Detalles asociados al pedido
@@ -146,6 +160,7 @@ def detalle_pedido(request, pk):
 
 
 # Vista para confirmar un pedido
+@login_required
 def confirmar_pedido(request, pedido_id):
     pedido = get_object_or_404(Boleta, id=pedido_id)
     if pedido.estado == 'procesado':

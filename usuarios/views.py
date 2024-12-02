@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Perfil
 
-
+@login_required
 def registro(request):
     if request.method == 'POST':
         form = RegistroForm(request.POST)

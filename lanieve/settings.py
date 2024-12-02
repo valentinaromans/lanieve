@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@r@&+2)gw==kly=g2j(@d-z-jt%c7_u$=jdym(&kp!z+)w#d--'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['proyectolanieve.pythonanywhere.com']
 
@@ -38,12 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework.authtoken',
-    'rest_framework',
-    'corsheaders',
     'usuarios',
     'inicio',
     'helados',
     'pedidos',
+    'rest_framework',
+    'corsheaders',
 ]
 
 
@@ -58,10 +58,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "https://proyectolanieve.pythonanywhere.com",
-]
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'lanieve.urls'
 import os
