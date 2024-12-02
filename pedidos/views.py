@@ -155,19 +155,6 @@ def detalle_pedido(request, pk):
 def confirmar_pedido(request, pedido_id):
     pedido = get_object_or_404(Boleta, id=pedido_id)
     if pedido.estado == 'procesado':
-        # Actualiza el estado del pedido
-        pedido.estado = 'realizado'
+        pedido.estado = 'finalizado' 
         pedido.save()
-
-        # Recorre los detalles de la boleta y descuenta el stock
-        detalles = BoletaDetalle.objects.filter(id_boleta=pedido)
-        for detalle in detalles:
-            helado = detalle.id_helado
-            if helado.stock >= detalle.cantidad:  # Verifica que haya suficiente stock
-                helado.stock -= detalle.cantidad
-                helado.save()
-            else:
-                # Maneja el caso en que el stock no sea suficiente
-                raise ValueError(f"Stock insuficiente para el helado {helado.nombre}.")
-
     return redirect('pedidos:detallepedido', pk=pedido.id)
