@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Boleta, Cliente, Pago, BoletaDetalle
+from .models import Boleta, Cliente, Pago
 from django.contrib.auth.decorators import login_required
 
 # Función para obtener el nombre del cliente desde la tabla Cliente
