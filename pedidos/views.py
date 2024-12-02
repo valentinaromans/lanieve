@@ -1,14 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Boleta, Cliente, Pago
+from .models import Boleta, Cliente, Pago, BoletaDetalle
 from django.contrib.auth.decorators import login_required
 
 # Función para obtener el nombre del cliente desde la tabla Cliente
-@login_required
 def get_cliente_nombre(cliente_id):
     cliente = Cliente.objects.get(id=cliente_id)  # Recuperamos el cliente usando la relación con la tabla Cliente
     return cliente.nombre if cliente else "Cliente desconocido"
 
-@login_required
+
 def pedidos_pendientes(request):
     pedidos = Boleta.objects.filter(estado='procesado').order_by('fecha_hora')
     for pedido in pedidos:
@@ -16,7 +15,7 @@ def pedidos_pendientes(request):
         pedido.detalles = pedido.boletadetalle_set.all()  # Relación inversa a través del modelo BoletaDetalle
     return render(request, 'pedidos/pedidos_pendientes.html', {'pedidos': pedidos})
 
-@login_required
+
 def historial_pedidos(request):
     pedidos = Boleta.objects.filter(estado='finalizado').order_by('fecha_hora')
     for pedido in pedidos:
@@ -26,7 +25,7 @@ def historial_pedidos(request):
         pedido.total_pago = pago.total if pago else 0
     return render(request, 'pedidos/historial_pedidos.html', {'pedidos': pedidos})
 
-@login_required
+
 def detalle_pedido(request, pk):
     pedido = get_object_or_404(Boleta, pk=pk)
     detalles = pedido.boletadetalle_set.all()  # Detalles asociados al pedido
@@ -44,10 +43,24 @@ def detalle_pedido(request, pk):
         'total_pago': total_pago,
     })
 
-@login_required
+
 def confirmar_pedido(request, pedido_id):
     pedido = get_object_or_404(Boleta, id=pedido_id)
     if pedido.estado == 'procesado':
-        pedido.estado = 'realizado'  # O el estado que corresponda cuando se confirme
+        # Actualiza el estado del pedido
+        pedido.estado = 'realizado'
         pedido.save()
+
+        # Recorre los detalles de la boleta y descuenta el stock
+        detalles = BoletaDetalle.objects.filter(id_boleta=pedido)
+        for detalle in detalles:
+            helado = detalle.id_helado
+            if helado.stock >= detalle.cantidad:  # Verifica que haya suficiente stock
+                helado.stock -= detalle.cantidad
+                helado.save()
+            else:
+                # Maneja el caso en que el stock no sea suficiente
+                raise ValueError(f"Stock insuficiente para el helado {helado.nombre}.")
+
     return redirect('pedidos:detallepedido', pk=pedido.id)
+

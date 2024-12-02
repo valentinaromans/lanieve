@@ -36,7 +36,7 @@ class BoletaDetalle(models.Model):
     id_detalle = models.AutoField(primary_key=True)
     id_boleta = models.ForeignKey(Boleta, null=True, blank=True, on_delete=models.CASCADE)  # Permite nulos
     id_helado = models.ForeignKey(Helado, on_delete=models.CASCADE)
-    codigo = models.IntegerField(unique=True)
+    codigo = models.IntegerField(unique=False)
     cantidad = models.SmallIntegerField()
 
     def __str__(self):
