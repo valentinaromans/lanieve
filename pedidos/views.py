@@ -46,6 +46,6 @@ def detalle_pedido(request, pk):
 def confirmar_pedido(request, pedido_id):
     pedido = get_object_or_404(Boleta, id=pedido_id)
     if pedido.estado == 'procesado':
-        pedido.estado = 'finalizado' 
+        pedido.estado = 'finalizado'
         pedido.save()
     return redirect('pedidos:detallepedido', pk=pedido.id)
