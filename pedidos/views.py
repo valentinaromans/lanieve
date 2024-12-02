@@ -1,6 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
+<<<<<<< HEAD
 from .models import Boleta, Cliente, Pago
 from django.contrib.auth import authenticate
+=======
+from .models import Boleta, Cliente, Pago, BoletaDetalle
+>>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
 from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,6 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 import json
 
+<<<<<<< HEAD
 @api_view(['POST'])
 def RegisterView(request):
     """
@@ -112,13 +117,19 @@ def api_articulos_detalle(request, pk):
 
 # Función para obtener el nombre del cliente
 @login_required
+=======
+# Función para obtener el nombre del cliente desde la tabla Cliente
+>>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
 def get_cliente_nombre(cliente_id):
     cliente = Cliente.objects.get(id=cliente_id)  # Recuperamos el cliente
     return cliente.nombre if cliente else "Cliente desconocido"
 
 
+<<<<<<< HEAD
 # Vista de pedidos pendientes
 @login_required
+=======
+>>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
 def pedidos_pendientes(request):
     pedidos = Boleta.objects.filter(estado='procesado').order_by('fecha_hora')
     for pedido in pedidos:
@@ -127,8 +138,11 @@ def pedidos_pendientes(request):
     return render(request, 'pedidos/pedidos_pendientes.html', {'pedidos': pedidos})
 
 
+<<<<<<< HEAD
 # Vista de historial de pedidos
 @login_required
+=======
+>>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
 def historial_pedidos(request):
     pedidos = Boleta.objects.filter(estado='finalizado').order_by('fecha_hora')
     for pedido in pedidos:
@@ -139,8 +153,11 @@ def historial_pedidos(request):
     return render(request, 'pedidos/historial_pedidos.html', {'pedidos': pedidos})
 
 
+<<<<<<< HEAD
 # Vista de detalle del pedido
 @login_required
+=======
+>>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
 def detalle_pedido(request, pk):
     pedido = get_object_or_404(Boleta, pk=pk)
     detalles = pedido.boletadetalle_set.all()  # Detalles asociados al pedido
@@ -159,12 +176,28 @@ def detalle_pedido(request, pk):
     })
 
 
+<<<<<<< HEAD
 # Vista para confirmar un pedido
 @login_required
+=======
+>>>>>>> 03473e5075acce8de01d71c730745d9c29fe11d6
 def confirmar_pedido(request, pedido_id):
     pedido = get_object_or_404(Boleta, id=pedido_id)
     if pedido.estado == 'procesado':
-        pedido.estado = 'realizado'  # O el estado que corresponda cuando se confirme
+        # Actualiza el estado del pedido
+        pedido.estado = 'realizado'
         pedido.save()
+
+        # Recorre los detalles de la boleta y descuenta el stock
+        detalles = BoletaDetalle.objects.filter(id_boleta=pedido)
+        for detalle in detalles:
+            helado = detalle.id_helado
+            if helado.stock >= detalle.cantidad:  # Verifica que haya suficiente stock
+                helado.stock -= detalle.cantidad
+                helado.save()
+            else:
+                # Maneja el caso en que el stock no sea suficiente
+                raise ValueError(f"Stock insuficiente para el helado {helado.nombre}.")
+
     return redirect('pedidos:detallepedido', pk=pedido.id)
 
