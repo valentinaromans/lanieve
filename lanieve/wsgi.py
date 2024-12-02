@@ -1,16 +1,13 @@
-"""
-WSGI config for lanieve project.
-
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
-"""
-
 import os
+import sys
 
-from django.core.wsgi import get_wsgi_application
+# Añadir la ruta del proyecto a PYTHONPATH
+sys.path.append('/home/proyectolanieve/lanieve')
+sys.path.append('/home/proyectolanieve/.virtualenvs/venv/lib/python3.10/site-packages')
 
+# Establecer la configuración de Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lanieve.settings')
 
+# Obtén la aplicación WSGI
+from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()

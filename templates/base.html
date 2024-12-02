@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static 'css/styleabout.css' %}">
     <link rel="stylesheet" href="{% static 'css/stylecrud.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    
+
     <!-- FUENTES -->
     <script src="https://kit.fontawesome.com/0cdcbb62ac.js" crossorigin="anonymous"></script>
 
@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
 </head>
-<body>  
+<body>
     <!-- Barra de navegación -->
     <header class="navbar-header">
         <div class="navbar-logo">
@@ -53,19 +53,19 @@
               <li><a href="{% url 'inicio:about_us' %}">About Us</a></li>
               <li><a href="{% url 'inicio:recomendaciones' %}">Recomendaciones</a></li>
               <li><a href="{% url 'inicio:codigo' %}">Código</a></li>
-              
+
               <a download="APPnieve" href="/static/app/lanieve.apk"><button class="dwl-button">Descarga nuestra APP!</button></a>
             {% endif %}
           </ul>
         </nav>
       </header>
-      
-      
+
+
 
     <!-- Contenido principal -->
     <main class="content">
         {% block content %}
-        
+
         {% endblock %}
     </main>
 
@@ -96,12 +96,12 @@
           </div>
         </div>
     </div>
-    
+
     <footer class="navbar-footer">
         <p>Todos los derechos reservados &copy; 2024 Heladería La Nieve.</p>
     </footer>
 
-    
+
     <!-- JavaScript de Bootstrap desde CDN -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script
